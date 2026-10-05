@@ -159,6 +159,39 @@ for (const must of ["'shell.overlay'", "'conversation.composer.dock'", "'setting
 // 槽位 id 必须与主题插件的设置行 id 不同（否则会顶掉那一格）
 if (clientSrc.includes("id: 'dsh-harness-os-theme'")) fail('设置行 id 与主题插件重名，会顶掉对方的设置格')
 
+// ── 7. 偏好键一致性 ────────────────────────────────────────────────────────
+// 曾经的缺陷：readPrefs 手写初始化只列了 5 个键，漏掉后加的 pills / hero，
+// 于是 prefs.pills 恒为 undefined（快捷操作永不渲染）、patch('hero') 恒写 false
+// （Hero 永远打不开）—— 开关点了没反应的静默失效。
+// 这里同时钉住两处，让"新增偏好只改 DEFAULTS"成为可验证的事实。
+const defaultsMatch = clientCode.match(/var DEFAULTS = \{([^}]*)\}/)
+if (!defaultsMatch) {
+  fail('找不到 DEFAULTS 定义')
+} else {
+  const defaultsKeys = [...defaultsMatch[1].matchAll(/([a-zA-Z][a-zA-Z0-9]*)\s*:/g)].map((m) => m[1]).sort()
+
+  const rpStart = clientCode.indexOf('function readPrefs')
+  const rpEnd = clientCode.indexOf('function writePrefs')
+  const readPrefsBody = rpStart >= 0 && rpEnd > rpStart ? clientCode.slice(rpStart, rpEnd) : ''
+  if (!readPrefsBody) fail('找不到 readPrefs')
+  else if (!readPrefsBody.includes('in DEFAULTS')) {
+    fail('readPrefs 未遍历 DEFAULTS —— 手写键列表会随 DEFAULTS 增长而静默漏键')
+  }
+
+  const toggleMatch = clientCode.match(/\[\s*((?:'[a-zA-Z]+'\s*,\s*)*'[a-zA-Z]+')\s*\]\s*\.map/)
+  if (!toggleMatch) {
+    fail('找不到设置行开关列表')
+  } else {
+    const toggleKeys = [...toggleMatch[1].matchAll(/'([a-zA-Z]+)'/g)].map((m) => m[1]).sort()
+    const same = toggleKeys.length === defaultsKeys.length && toggleKeys.every((k, i) => k === defaultsKeys[i])
+    if (!same) {
+      fail(`设置行开关列表与 DEFAULTS 不一致：DEFAULTS=[${defaultsKeys.join(',')}] 开关=[${toggleKeys.join(',')}]`)
+    } else if (readPrefsBody.includes('in DEFAULTS')) {
+      notes.push(`偏好键一致：DEFAULTS、readPrefs、设置行开关同为 ${defaultsKeys.length} 个键`)
+    }
+  }
+}
+
 // ── 汇总 ───────────────────────────────────────────────────────────────────
 for (const n of notes) console.log(`  · ${n}`)
 if (problems.length) {
