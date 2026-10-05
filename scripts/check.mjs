@@ -121,16 +121,18 @@ const clientSrc = read('lib/client.js')
 
 const cssStart = clientSrc.indexOf('var CSS = [')
 const cssEnd = clientSrc.indexOf("].join('\\n')", cssStart)
+// 允许的作用域根：每一条规则都必须挂在其中之一，绝不允许裸选择器。
+const SCOPES = ['#harness-os-chrome', '#harness-os-dock']
 if (cssStart < 0 || cssEnd < 0) {
   fail('lib/client.js 里找不到 CSS 数组')
 } else {
   const block = clientSrc.slice(cssStart, cssEnd)
   const lines = [...block.matchAll(/'([^']*)'/g)].map((m) => m[1]).filter((s) => s.trim() !== '')
-  const bad = lines.filter((l) => !l.trimStart().startsWith('#harness-os-chrome'))
+  const bad = lines.filter((l) => !SCOPES.some((s) => l.trimStart().startsWith(s)))
   if (bad.length) {
-    fail(`CSS 有 ${bad.length} 条规则未以 #harness-os-chrome 开头（会污染宿主样式）：${bad.slice(0, 3).join(' | ')}`)
+    fail(`CSS 有 ${bad.length} 条规则未以 ${SCOPES.join(' / ')} 开头（会污染宿主样式）：${bad.slice(0, 3).join(' | ')}`)
   } else {
-    notes.push(`CSS 作用域：${lines.length} 条规则全部限定在 #harness-os-chrome 内`)
+    notes.push(`CSS 作用域：${lines.length} 条规则全部限定在 ${SCOPES.length} 个作用域根内`)
   }
 }
 
@@ -150,7 +152,7 @@ for (const forbidden of [
 // 通配/元素选择器不再单独扫描 —— "每条 CSS 规则都必须以 #harness-os-chrome 开头"
 // 是更强的不变量：`#harness-os-chrome *{…}` 合法，裸 `*{…}` 会在上面那一关就被拦下。
 
-for (const must of ["'shell.overlay'", "'settings.general.item'", "'dsh-harness-os-ui'", 'var(--dsw-']) {
+for (const must of ["'shell.overlay'", "'conversation.composer.dock'", "'settings.general.item'", "'dsh-harness-os-ui'", 'var(--dsw-']) {
   if (!clientSrc.includes(must)) fail(`lib/client.js 缺少必需内容：${must}`)
 }
 

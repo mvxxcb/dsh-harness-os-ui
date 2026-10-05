@@ -8,13 +8,29 @@
 
 ## 它做什么
 
-| 能力 | 说明 |
-|---|---|
-| **帧层装饰** | 四角 L 型定位角标、制图辅助线、底边线 + 橙色活动节点、右下品牌标记、可选 HUD 文本带 |
-| **设计稿预览** | 设置里一个按钮,新标签打开完整的 HOME / SETTINGS 设计页(由 host 半按白名单提供) |
-| **随主题变色** | 颜色一律消费 `var(--dsw-alias-*)`,自动跟随当前主题(含 `dsh-harness-os-theme`) |
+| 能力 | 挂载点 | 槽位类型 |
+|---|---|---|
+| **帧层装饰**：四角 L 型角标、制图辅助线、底边线 + 橙色活动节点、右下品牌标记 | `shell.overlay` | list · none |
+| **快捷操作胶囊**：文件上传 / 知识库 / 生成图像 | `conversation.composer.dock` | list · none |
+| **底部 HUD 文本带**：信号柱、`[ 01 / 06 ] HOME`、`等待用户输入…`、`REV 0.1.0`、进度条 | `conversation.composer.dock` | list · none |
+| **设置行**：六个开关 + 打开设计预览 | `settings.general.item` | list · none |
+| **设计稿预览**：完整 HOME / SETTINGS 两屏 | host 路由 `/harness-os/ui` | — |
+| **随主题变色** | 颜色一律消费 `var(--dsw-alias-*)` | — |
 
-**它刻意不做的事:替换宿主外壳。** 见下节。
+挂载点全部是 `replaceRisk: none` 的**加性席位** —— 新 id 加在自带条目旁边,绝不顶替。
+
+## 为什么 Hero 还没做(以及它在哪)
+
+设计稿中央的雷达环 + 「探索未至之境」需要一块**空白会话的 Hero 区域**。查过槽位目录后:
+
+- `conversation.hero.workspace` 的官方定义是 *"Workspace picker shown by the blank-session Hero"*,
+  它是 **single** 且 `replaceRisk: shadows-shipped-ui` —— 占它会**顶掉宿主的 Workspace 选择器**。
+- `conversation.hero.workspace.directoryFlow` 同理。
+- 宿主**没有暴露**"Hero 视觉容器"的槽位。
+
+所以 Hero 只能走两条路:①`shell.overlay` 在空白会话时叠一层(会与宿主自己的 Hero 文案视觉重叠);
+②替换 `conversation.hero.workspace`(失去 Workspace 选择器)。
+两条都需要你确认取舍,因此**默认关闭**,留了 `hero` 开关位。
 
 ## 为什么是"加性叠加"而不是"替换界面"
 
