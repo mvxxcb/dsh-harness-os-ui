@@ -19,18 +19,26 @@
 
 挂载点全部是 `replaceRisk: none` 的**加性席位** —— 新 id 加在自带条目旁边,绝不顶替。
 
-## 为什么 Hero 还没做(以及它在哪)
+## Hero 雷达环（叠加式，默认关闭）
 
 设计稿中央的雷达环 + 「探索未至之境」需要一块**空白会话的 Hero 区域**。查过槽位目录后:
 
 - `conversation.hero.workspace` 的官方定义是 *"Workspace picker shown by the blank-session Hero"*,
-  它是 **single** 且 `replaceRisk: shadows-shipped-ui` —— 占它会**顶掉宿主的 Workspace 选择器**。
-- `conversation.hero.workspace.directoryFlow` 同理。
-- 宿主**没有暴露**"Hero 视觉容器"的槽位。
+  它是 **single** 且 `replaceRisk: shadows-shipped-ui` —— 占它只会**顶掉宿主的 Workspace 选择器**,
+  拿不到 Hero 的背景视觉。
+- `conversation.content` 是**工厂**不是槽位,其下没有加性子槽(两处独立验证过)。
 
-所以 Hero 只能走两条路:①`shell.overlay` 在空白会话时叠一层(会与宿主自己的 Hero 文案视觉重叠);
-②替换 `conversation.hero.workspace`(失去 Workspace 选择器)。
-两条都需要你确认取舍,因此**默认关闭**,留了 `hero` 开关位。
+所以 Hero 走**叠加层**实现,并且刻意为:
+
+1. **位置实测,不猜中心** —— 读 `[data-composer-seat]`(文档化的稳定锚点)的包围盒,
+   把雷达环居中在输入座正上方。按视口 50% 居中会因为左侧栏而整体偏左。
+2. **空会话判定保守** —— 只要任一 `[data-slot="conversation.chat.node"]` 带非空文本就隐藏;
+   任何不确定也隐藏。宁可少显示,也绝不盖在真实对话上。
+3. **默认关闭** —— 因为宿主自己的欢迎文案也在同一区域,可能视觉重叠。
+   开关在「设置 → 通用 → HARNESS OS 界面 → Hero 雷达环」,开了自己看效果再决定去留。
+
+雷达环用**纯 CSS 圆弧**(圆 + 透明边框 + 只给部分边着色)实现,而不是内联 SVG data-URI ——
+因为 data-URI 里解析不了 CSS 变量,颜色就只能硬编码;纯 CSS 方案让颜色全部走 `--dsw-*` 令牌。
 
 ## 为什么是"加性叠加"而不是"替换界面"
 

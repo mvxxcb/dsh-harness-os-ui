@@ -1,6 +1,6 @@
 {
   "name": "dsh-harness-os-ui",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "HARNESS OS shell chrome for the DeepSeek Harness Web UI: frame corner marks, drafting guides, HUD edge line — plus a full-fidelity preview of the HOME / SETTINGS design system.",
   "type": "module",
   "license": "MIT",
