@@ -179,6 +179,7 @@ lib/index.js        host 半：白名单静态路由 + 信任栅栏
 lib/client.js       client 半：shell.overlay 装饰 + 设置行
 ui/                 设计稿（封面 + 两屏 + 设计系统 CSS）
 scripts/check.mjs   提交前门禁（清单 / 白名单 / 作用域 / 令牌纪律 / 跨插件占用）
+docs/BRIEF.md       设计需求：视觉语言、禁用项、两屏逐项规格、待确认项
 docs/DESIGN.md      设计系统说明：取色、字阶、间距、组件语言、取舍
 ```
 
