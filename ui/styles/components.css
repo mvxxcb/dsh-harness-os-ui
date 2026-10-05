@@ -1,0 +1,438 @@
+/* ============================================================================
+ * HARNESS OS · 组件层（Components）
+ * ----------------------------------------------------------------------------
+ * 统一组件语言：1px 边框 · 小圆角 · 细分割线 · 线性图标 · 紧凑按钮
+ *              小号标签 · Monospace 元信息 · 橙色活动态
+ * 所有间距取自 tokens 的 8/4 系统。
+ * ========================================================================== */
+
+/* ============================================================================
+ * 侧栏
+ * ========================================================================== */
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--paper-rail);
+  border-right: 1px solid var(--line-l2);
+  padding: var(--s5) var(--s4) var(--s4);
+}
+
+/* 品牌：Logo + HARNESSS 徽标 */
+.brand { display: flex; align-items: center; gap: var(--s2); padding: 0 var(--s2) var(--s5); }
+.brand__mark { display: block; width: 18px; height: 18px; flex: none; }
+.brand__name { font-size: var(--fs-md); font-weight: 600; letter-spacing: 0.01em; }
+.brand__badge {
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-cap);
+  color: var(--ink-3);
+  border: 1px solid var(--line-l3);
+  border-radius: var(--r-xs);
+  padding: 1px 4px;
+  margin-left: 2px;
+}
+
+/* 导航项：中文主 + 英文 ALL CAPS 副 */
+.navitem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  width: 100%;
+  padding: 7px var(--s2) 7px 14px;
+  border-radius: var(--r-sm);
+  color: var(--ink-2);
+  text-align: left;
+}
+.navitem:hover { background: rgba(20, 19, 15, 0.03); }
+.navitem__ico { flex: none; width: 14px; height: 14px; color: var(--ink-3); }
+.navitem__cn { font-size: var(--fs-base); }
+.navitem__en {
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-cap);
+  color: var(--ink-4);
+  margin-left: auto;
+}
+
+/* 当前选中：左侧一根短橙色竖线 */
+.navitem[aria-current="true"] { color: var(--ink); background: var(--surface); }
+.navitem[aria-current="true"]::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 50%;
+  width: 2px; height: 14px;
+  margin-top: -7px;
+  background: var(--accent);
+}
+.navitem[aria-current="true"] .navitem__ico { color: var(--accent); }
+
+/* 主行动项：新会话。细边框，不抢眼 */
+.navitem--primary {
+  border: 1px solid var(--line-l3);
+  background: var(--surface);
+  border-radius: var(--r-md);
+  padding: 8px var(--s3);
+  color: var(--ink);
+}
+.navitem--primary .navitem__ico { color: var(--accent); }
+
+/* 分割区域标题 + 右侧小工具 */
+.rail__head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s2);
+  padding: var(--s5) var(--s2) var(--s2);
+}
+/* 中文与英文分两行，避免与右侧工具争宽导致换行错位 */
+.rail__head-label { flex: 1; min-width: 0; }
+.rail__head-label .cn { display: block; font-size: var(--fs-cap); letter-spacing: 0.08em; color: var(--ink-3); }
+.rail__head-label .en { display: block; margin-top: 1px; }
+.rail__tools { display: flex; gap: var(--s1); }
+.iconbtn {
+  display: grid; place-items: center;
+  width: 20px; height: 20px;
+  border-radius: var(--r-xs);
+  color: var(--ink-4);
+}
+.iconbtn:hover { color: var(--ink-2); background: rgba(20, 19, 15, 0.04); }
+.iconbtn svg { width: 12px; height: 12px; }
+
+/* 工作区列表 */
+.rail__list { display: flex; flex-direction: column; gap: 1px; }
+.wsitem {
+  display: flex; align-items: center; gap: var(--s2);
+  padding: 6px var(--s2) 6px 14px;
+  border-radius: var(--r-sm);
+  color: var(--ink-2);
+  font-size: var(--fs-base);
+}
+.wsitem:hover { background: rgba(20, 19, 15, 0.03); }
+.wsitem[aria-current="true"] { color: var(--ink); }
+.wsitem[aria-current="true"] .wsitem__ico { color: var(--accent); }
+.wsitem__ico { width: 13px; height: 13px; color: var(--ink-4); flex: none; }
+.wsitem__meta { margin-left: auto; }
+
+.rail__spring { flex: 1; min-height: var(--s4); }
+
+/* 底部账号入口 */
+.wsitem--account { border-top: 1px solid var(--line-l2); border-radius: 0; padding-top: var(--s3); margin-top: var(--s2); }
+.wsitem--account .wsitem__num { font-family: var(--mono); font-size: var(--fs-sm); color: var(--ink-2); letter-spacing: 0.02em; }
+
+/* ============================================================================
+ * HOME
+ * ========================================================================== */
+
+.home { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+
+/* Hero：中央 AI Core + 标题。周围大量留白 */
+.hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s7);
+  padding: var(--s7) 0 var(--s6);
+  min-height: 0;
+  /* 用一条结构线把 Hero 与输入区分开——这是"水平辅助线"真正有意义的落点，
+     比在画面中间横切一条线更符合制图逻辑。 */
+  border-bottom: 1px solid var(--line-l1);
+}
+.core { position: relative; width: 300px; height: 300px; flex: none; }
+.core svg { display: block; width: 100%; height: 100%; overflow: visible; }
+
+.hero__title { text-align: center; }
+.hero__title .cn {
+  display: block;
+  font-size: var(--fs-hero);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  /* 标题周围的留白由 hero gap 与外层 padding 保证 */
+}
+.hero__title .en {
+  display: block;
+  margin-top: var(--s3);
+  font-family: var(--mono);
+  font-size: var(--fs-cap);
+  letter-spacing: var(--ls-hero);
+  color: var(--ink-3);
+  text-transform: uppercase;
+}
+
+/* 输入区 */
+.composer { width: var(--input-w); max-width: 100%; margin: 0 auto; }
+.composer__box {
+  display: flex;
+  flex-direction: column;
+  min-height: var(--input-h);
+  background: var(--surface);
+  border: 1px solid var(--line-l3);
+  border-radius: var(--r-lg);
+  /* 极轻微阴影——不是卡片投影，只是让白面从纸底上"浮起一层纸的厚度" */
+  box-shadow: 0 1px 2px rgba(20, 19, 15, 0.03);
+}
+.composer__input {
+  flex: 1;
+  padding: var(--s4) var(--s4) var(--s2);
+  font-size: var(--fs-base);
+  color: var(--ink-3);
+}
+.composer__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  padding: var(--s2) var(--s3) var(--s3);
+}
+.composer__plus {
+  display: grid; place-items: center;
+  width: 24px; height: 24px; flex: none;
+  border: 1px solid var(--line-l3);
+  border-radius: var(--r-pill);
+  color: var(--ink-2);
+}
+.composer__plus:hover { border-color: var(--line-l4); }
+.composer__chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.composer__chip svg { width: 12px; height: 12px; color: var(--ink-3); }
+.composer__bar .spacer { flex: 1; }
+.composer__model { display: inline-flex; align-items: center; gap: 5px; font-size: var(--fs-sm); color: var(--ink-2); }
+.composer__send {
+  display: grid; place-items: center;
+  width: 28px; height: 28px; flex: none;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: var(--ink-on-accent);
+}
+.composer__send svg { width: 14px; height: 14px; }
+
+/* 快捷操作：小型胶囊 */
+.pills { display: flex; justify-content: center; gap: var(--s2); margin-top: var(--s4); }
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px var(--s3);
+  border: 1px solid var(--line-l3);
+  border-radius: var(--r-pill);
+  background: var(--surface-raised);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.pill:hover { border-color: var(--line-l4); }
+.pill svg { width: 12px; height: 12px; color: var(--ink-3); }
+.pill[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
+.pill[aria-pressed="true"] svg { color: var(--accent); }
+
+/* 底部 HUD */
+.hud {
+  flex: none;
+  padding-top: var(--s4);
+  /* 底部留白：进度条不贴着视口下缘 */
+  padding-bottom: var(--s5);
+  border-top: 1px solid var(--line-l2);
+}
+.hud__row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--s4);
+  padding-bottom: var(--s3);
+}
+.hud__left  { display: flex; align-items: center; gap: var(--s3); }
+.hud__center { text-align: center; }
+.hud__center .cn { font-size: var(--fs-sm); color: var(--ink-3); letter-spacing: 0.04em; }
+.hud__center .en { display: block; margin-top: 2px; }
+.hud__right { display: flex; align-items: center; justify-content: flex-end; gap: var(--s2); }
+.hud__brand {
+  font-family: var(--mono);
+  font-size: var(--fs-meta);
+  letter-spacing: var(--ls-meta);
+  color: var(--ink-4);
+  text-transform: uppercase;
+}
+.hud__mark { position: relative; width: 26px; height: 6px; }
+.hud__mark::before { content: ""; position: absolute; inset: 0; background: var(--ink); }
+.hud__mark::after {
+  content: ""; position: absolute; left: 0; bottom: -3px;
+  width: 10px; height: 2px; background: var(--accent);
+}
+
+/* ============================================================================
+ * SETTINGS
+ * ========================================================================== */
+
+.settings { flex: 1; display: grid; grid-template-columns: 208px 1fr; min-height: 0; }
+
+.setnav { padding: var(--s5) var(--s4) 0 0; border-right: 1px solid var(--line-l2); }
+.setnav__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  align-items: center;
+  gap: var(--s3);
+  width: 100%;
+  padding: 8px var(--s2) 8px var(--s3);
+  border-radius: var(--r-sm);
+  text-align: left;
+  color: var(--ink-2);
+}
+.setnav__item:hover { background: rgba(20, 19, 15, 0.03); }
+.setnav__item svg { width: 14px; height: 14px; color: var(--ink-3); }
+.setnav__cn { font-size: var(--fs-base); display: block; }
+.setnav__en { display: block; font-size: var(--fs-micro); letter-spacing: var(--ls-cap); color: var(--ink-4); font-family: var(--mono); }
+.setnav__item[aria-current="true"] { background: var(--surface); color: var(--ink); }
+.setnav__item[aria-current="true"]::before {
+  content: ""; position: absolute; left: 0; top: 50%;
+  width: 2px; height: 18px; margin-top: -9px; background: var(--accent);
+}
+.setnav__item[aria-current="true"] svg { color: var(--accent); }
+
+.setbody { display: flex; flex-direction: column; min-height: 0; padding-left: var(--s6); }
+
+/* 设置页头 */
+.sethead {
+  display: flex; align-items: flex-start; gap: var(--s4);
+  padding: var(--s5) 0 var(--s4);
+  border-bottom: 1px solid var(--line-l2);
+}
+.sethead__t { flex: 1; }
+.sethead__t .cn { font-size: var(--fs-xl); font-weight: 600; letter-spacing: 0.06em; }
+.sethead__t .en { display: block; margin-top: var(--s1); }
+.sethead__act { display: flex; align-items: center; gap: var(--s2); }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px var(--s3);
+  border: 1px solid var(--line-l3);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.btn:hover { border-color: var(--line-l4); }
+.btn--ghost { border-color: transparent; background: none; }
+.btn svg { width: 12px; height: 12px; }
+
+/* 可滚动内容区 */
+.setpane { flex: 1; min-height: 0; overflow-y: auto; padding: var(--s5) 0 var(--s7); }
+.panel[hidden] { display: none; }
+
+/* ── 模块：标题 + 英文副标 + 细分割线 + 参数。不用大面积 Card ───────────── */
+.module { padding-bottom: var(--s5); margin-bottom: var(--s5); border-bottom: 1px solid var(--line-l2); }
+.module:last-child { border-bottom: 0; margin-bottom: 0; }
+.module__head { display: flex; align-items: baseline; gap: var(--s3); margin-bottom: var(--s3); }
+.module__head .cn { font-size: var(--fs-md); font-weight: 600; letter-spacing: 0.02em; }
+.module__head .en { letter-spacing: var(--ls-cap); }
+
+/* 参数行：左标签（中+英），右控件 */
+.row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  align-items: center;
+  gap: var(--s4);
+  padding: var(--s3) 0;
+  border-top: 1px solid var(--line-l1);
+}
+.module .row:first-of-type { border-top: 0; }
+.row__label .cn { font-size: var(--fs-base); color: var(--ink); display: block; }
+.row__label .en { display: block; margin-top: 1px; }
+.row__ctl { display: flex; align-items: center; gap: var(--s3); }
+.row__val { font-family: var(--mono); font-size: var(--fs-meta); color: var(--ink-4); letter-spacing: var(--ls-meta); }
+
+/* Segmented control：精密、克制 */
+.seg { display: inline-flex; border: 1px solid var(--line-l3); border-radius: var(--r-md); overflow: hidden; background: var(--surface); }
+.seg button {
+  padding: 4px var(--s3);
+  font-family: var(--mono);
+  font-size: var(--fs-meta);
+  letter-spacing: var(--ls-meta);
+  text-transform: uppercase;
+  color: var(--ink-4);
+  border-left: 1px solid var(--line-l2);
+}
+.seg button:first-child { border-left: 0; }
+.seg button:hover { color: var(--ink-2); }
+.seg button[aria-pressed="true"] { color: var(--accent); background: var(--accent-wash); }
+
+/* Toggle：极小，1px 边框 */
+.toggle {
+  position: relative;
+  width: 30px; height: 15px;
+  border: 1px solid var(--line-l3);
+  border-radius: var(--r-pill);
+  background: var(--surface);
+}
+.toggle::after {
+  content: ""; position: absolute; top: 2px; left: 2px;
+  width: 9px; height: 9px; border-radius: var(--r-pill);
+  background: var(--ink-4);
+  transition: transform 120ms ease, background 120ms ease;
+}
+.toggle[aria-pressed="true"] { border-color: var(--accent); }
+.toggle[aria-pressed="true"]::after { transform: translateX(15px); background: var(--accent); }
+
+/* 插件列表：纵向，细线分隔，激活处橙点 */
+.plist { display: flex; flex-direction: column; }
+.plist__row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: var(--s4);
+  padding: var(--s3) 0;
+  border-top: 1px solid var(--line-l1);
+}
+.plist__row:first-child { border-top: 0; }
+.plist__name { display: flex; align-items: center; gap: var(--s2); font-size: var(--fs-base); color: var(--ink); }
+.plist__desc { display: block; margin-top: 2px; font-size: var(--fs-sm); color: var(--ink-3); }
+.plist__ver { font-family: var(--mono); font-size: var(--fs-meta); color: var(--ink-4); letter-spacing: var(--ls-meta); }
+
+/* Agent 预设：编号 + 名称 + 状态 */
+.alist { display: flex; flex-direction: column; }
+.alist__row {
+  display: grid;
+  grid-template-columns: 34px 1fr auto;
+  align-items: center;
+  gap: var(--s3);
+  padding: var(--s3) 0;
+  border-top: 1px solid var(--line-l1);
+}
+.alist__row:first-child { border-top: 0; }
+.alist__no { font-family: var(--mono); font-size: var(--fs-meta); color: var(--ink-4); letter-spacing: var(--ls-meta); }
+.alist__name { font-size: var(--fs-base); color: var(--ink); }
+.alist__row[aria-current="true"] { position: relative; }
+.alist__row[aria-current="true"]::before {
+  content: ""; position: absolute; left: -12px; top: 50%;
+  width: 2px; height: 14px; margin-top: -7px; background: var(--accent);
+}
+.alist__state { font-family: var(--mono); font-size: var(--fs-meta); letter-spacing: var(--ls-meta); color: var(--ink-4); }
+.alist__row[aria-current="true"] .alist__state { color: var(--accent); }
+
+/* 启动序列 Timeline */
+.boot { display: flex; flex-direction: column; gap: 0; }
+.boot__step {
+  display: grid;
+  grid-template-columns: 34px 14px 1fr auto;
+  align-items: center;
+  gap: var(--s3);
+  padding: var(--s3) 0;
+}
+.boot__no { font-family: var(--mono); font-size: var(--fs-meta); color: var(--ink-4); letter-spacing: var(--ls-meta); }
+.boot__line { position: relative; align-self: stretch; display: grid; place-items: center; }
+.boot__line::before { content: ""; position: absolute; top: 0; bottom: 0; width: 1px; background: var(--line-l3); }
+.boot__node { position: relative; width: 7px; height: 7px; border-radius: var(--r-pill); background: var(--ink); }
+.boot__step--current .boot__node { background: var(--accent); }
+.boot__step:first-child .boot__line::before { top: 50%; }
+.boot__step:last-child  .boot__line::before { bottom: 50%; }
+.boot__name { font-family: var(--mono); font-size: var(--fs-cap); letter-spacing: var(--ls-cap); text-transform: uppercase; color: var(--ink-2); }
+.boot__step--current .boot__name { color: var(--ink); }
+.boot__state { font-family: var(--mono); font-size: var(--fs-meta); letter-spacing: var(--ls-meta); color: var(--ink-4); }
+.boot__step--current .boot__state { color: var(--accent); }
+
+/* 模型参数条行 */
+.mrow { display: grid; grid-template-columns: 96px 1fr 52px; align-items: center; gap: var(--s4); padding: var(--s3) 0; border-top: 1px solid var(--line-l1); }
+.mrow:first-of-type { border-top: 0; }
+.mrow__k { font-family: var(--mono); font-size: var(--fs-meta); letter-spacing: var(--ls-meta); text-transform: uppercase; color: var(--ink-4); }
+.mrow__v { font-family: var(--mono); font-size: var(--fs-meta); color: var(--ink-3); text-align: right; letter-spacing: var(--ls-meta); }

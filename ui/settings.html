@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>HARNESS OS · SETTINGS / 设置</title>
+<link rel="stylesheet" href="styles/tokens.css">
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- 屏幕四角：非常细的 L 型定位角标 -->
+  <div class="corners" aria-hidden="true"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div>
+
+  <!-- ═══ 侧栏：与 HOME 完全一致 ═════════════════════════════════════════ -->
+  <aside class="rail">
+    <div class="brand">
+      <svg class="brand__mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M3 9.5c2.6-3.4 6.2-3.9 9-2.2 2.8 1.7 6.4 1.2 9-2.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        <path d="M12 12.6v5.2M8.6 15.2 12 12.6l3.4 2.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="brand__name">deepseek</span>
+      <span class="brand__badge">HARNESS</span>
+    </div>
+
+    <button class="navitem">
+      <svg class="navitem__ico" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <span class="navitem__cn">新会话</span>
+    </button>
+
+    <div style="height:var(--s2)"></div>
+
+    <button class="navitem">
+      <svg class="navitem__ico" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 2.5v2M10 2.5v2M4.5 4.5h7v3a3.5 3.5 0 0 1-7 0v-3ZM8 11v2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="navitem__cn">插件</span>
+      <span class="navitem__en">PLUGINS</span>
+    </button>
+
+    <div class="rail__head">
+      <span class="rail__head-label">
+        <span class="cn">工作区</span>
+        <span class="en t-meta">WORKSPACE</span>
+      </span>
+      <span class="rail__tools">
+        <span class="iconbtn" title="搜索"><svg viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.2" stroke="currentColor" stroke-width="1.2"/><path d="m10.2 10.2 3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+        <span class="iconbtn" title="筛选"><svg viewBox="0 0 16 16" fill="none"><path d="M3 5h10M5 8h6M7 11h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+        <span class="iconbtn" title="新建"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3.5v9M3.5 8h9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+      </span>
+    </div>
+
+    <div class="rail__list">
+      <button class="wsitem">
+        <svg class="wsitem__ico" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.5 5.2h4l1.2 1.4h5.8v6.2a.8.8 0 0 1-.8.8H3.3a.8.8 0 0 1-.8-.8V5.2Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+        <span>我的工作区</span><span class="wsitem__meta t-meta">03</span>
+      </button>
+      <button class="wsitem">
+        <svg class="wsitem__ico" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.5 5.2h4l1.2 1.4h5.8v6.2a.8.8 0 0 1-.8.8H3.3a.8.8 0 0 1-.8-.8V5.2Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+        <span>默认工作区</span><span class="wsitem__meta t-meta">01</span>
+      </button>
+    </div>
+
+    <div class="rail__spring"></div>
+
+    <button class="wsitem wsitem--account">
+      <svg class="wsitem__ico" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="6" r="2.4" stroke="currentColor" stroke-width="1.2"/><path d="M3.6 13c.5-2.2 2.3-3.4 4.4-3.4S11.9 10.8 12.4 13" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <span class="wsitem__num">139******62</span>
+      <span class="wsitem__meta t-meta">›</span>
+    </button>
+  </aside>
+
+  <!-- ═══ 设置区 ═════════════════════════════════════════════════════════ -->
+  <main class="main">
+    <!-- 结构辅助线：对齐设置内容栏的左边界（32 页面留白 + 208 导航 + 32 内容内距） -->
+    <div class="guides" aria-hidden="true">
+      <i class="v" style="left:272px"></i>
+    </div>
+
+    <div class="sysbar">
+      <span class="t-meta t-meta--ink">REV 0.1.0</span>
+      <span class="t-meta">·</span>
+      <span class="t-meta t-meta--ink">WEB PROFILE</span>
+      <span class="ticks" aria-hidden="true"><i></i><i></i><i></i><i class="on"></i><i></i><i></i><i></i></span>
+      <span class="spacer"></span>
+      <span class="t-meta">STATUS</span>
+      <span class="dot dot--on" aria-hidden="true"></span>
+      <span class="t-meta t-accent">ACTIVE</span>
+      <span class="t-meta t-accent t-num" id="clock">18:32:04</span>
+    </div>
+
+    <div class="settings">
+      <!-- 设置导航 -->
+      <nav class="setnav" aria-label="设置">
+        <button class="setnav__item" data-panel="account">
+          <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="2.4" stroke="currentColor" stroke-width="1.2"/><path d="M3.6 13c.5-2.2 2.3-3.4 4.4-3.4S11.9 10.8 12.4 13" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <span><span class="setnav__cn">账号与余额</span><span class="setnav__en">ACCOUNT</span></span>
+        </button>
+        <button class="setnav__item" data-panel="general" aria-current="true">
+          <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.2"/><path d="M8 2.4v1.6M8 12v1.6M2.4 8h1.6M12 8h1.6M4 4l1.1 1.1M10.9 10.9 12 12M12 4l-1.1 1.1M5.1 10.9 4 12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <span><span class="setnav__cn">通用设置</span><span class="setnav__en">GENERAL</span></span>
+        </button>
+        <button class="setnav__item" data-panel="model">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 2.6 13 5v6l-5 2.4L3 11V5l5-2.4Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M3 5l5 2.4L13 5M8 7.4v6" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+          <span><span class="setnav__cn">模型</span><span class="setnav__en">MODEL</span></span>
+        </button>
+        <button class="setnav__item" data-panel="plugins">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M6 2.5v2M10 2.5v2M4.5 4.5h7v3a3.5 3.5 0 0 1-7 0v-3ZM8 11v2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span><span class="setnav__cn">内置插件</span><span class="setnav__en">PLUGINS</span></span>
+        </button>
+        <button class="setnav__item" data-panel="presets">
+          <svg viewBox="0 0 16 16" fill="none"><rect x="3" y="3" width="10" height="10" rx="1.2" stroke="currentColor" stroke-width="1.2"/><path d="M6 6h4M6 8.4h4M6 10.8h2.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <span><span class="setnav__cn">Agent 预设</span><span class="setnav__en">PRESETS</span></span>
+        </button>
+        <button class="setnav__item" data-panel="boot">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 2.6v2M8 11.4v2M2.6 8h2M11.4 8h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.2"/></svg>
+          <span><span class="setnav__cn">启动动画</span><span class="setnav__en">BOOT SEQUENCE</span></span>
+        </button>
+        <button class="setnav__item" data-panel="cards">
+          <svg viewBox="0 0 16 16" fill="none"><rect x="2.6" y="3.4" width="10.8" height="9.2" rx="1.2" stroke="currentColor" stroke-width="1.2"/><path d="M2.6 6.6h10.8" stroke="currentColor" stroke-width="1.2"/></svg>
+          <span><span class="setnav__cn">侧边卡片</span><span class="setnav__en">SIDE CARDS</span></span>
+        </button>
+      </nav>
+
+      <!-- 设置内容 -->
+      <div class="setbody">
+        <header class="sethead">
+          <div class="sethead__t">
+            <span class="cn">设置</span>
+            <span class="en t-cap">SETTINGS</span>
+          </div>
+          <div class="sethead__act">
+            <button class="btn">
+              <svg viewBox="0 0 16 16" fill="none"><path d="M4 2.6h5.4L12.6 5.8V13.4H4z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M9.2 2.6v3.2h3.4" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+              打开配置文件
+            </button>
+            <button class="btn btn--ghost" title="关闭设置">
+              <svg viewBox="0 0 16 16" fill="none"><path d="m4.5 4.5 7 7M11.5 4.5l-7 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </header>
+
+        <div class="setpane">
+
+          <!-- ── 通用设置 ─────────────────────────────────────────────── -->
+          <section class="panel" data-panel="general">
+            <div class="module">
+              <div class="module__head">
+                <span class="cn">界面设置</span>
+                <span class="en t-cap">INTERFACE</span>
+              </div>
+
+              <div class="row">
+                <div class="row__label"><span class="cn">主题</span><span class="en t-cap">THEME</span></div>
+                <div class="row__ctl">
+                  <div class="seg" data-seg>
+                    <button aria-pressed="true">LIGHT</button><button>DARK</button><button>SYSTEM</button>
+                  </div>
+                  <span class="row__val">TOKENS · ALIAS</span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="row__label"><span class="cn">语言</span><span class="en t-cap">LANGUAGE</span></div>
+                <div class="row__ctl">
+                  <div class="seg" data-seg><button aria-pressed="true">中文</button><button>ENGLISH</button></div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="row__label"><span class="cn">动画</span><span class="en t-cap">MOTION</span></div>
+                <div class="row__ctl">
+                  <button class="toggle" aria-pressed="true" data-motion></button>
+                  <span class="row__val">96S REV</span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="row__label"><span class="cn">启动动画</span><span class="en t-cap">BOOT SEQUENCE</span></div>
+                <div class="row__ctl">
+                  <button class="toggle" aria-pressed="true"></button>
+                  <span class="row__val">6 STAGES</span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="row__label"><span class="cn">HUD 效果</span><span class="en t-cap">HUD OVERLAY</span></div>
+                <div class="row__ctl">
+                  <button class="toggle" aria-pressed="true"></button>
+                  <span class="row__val">READY</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="module">
+              <div class="module__head">
+                <span class="cn">工作区设置</span>
+                <span class="en t-cap">WORKSPACE</span>
+              </div>
+
+              <div class="row">
+                <div class="row__label"><span class="cn">默认工作区</span><span class="en t-cap">DEFAULT</span></div>
+                <div class="row__ctl">
+                  <span class="t-body" style="color:var(--ink)">我的工作区</span>
+                  <span class="row__val">/WORKSPACES/MAIN</span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="row__label"><span class="cn">自动保存</span><span class="en t-cap">AUTOSAVE</span></div>
+                <div class="row__ctl">
+                  <button class="toggle" aria-pressed="true"></button>
+                  <span class="row__val">EVERY 30S</span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="row__label"><span class="cn">历史记录</span><span class="en t-cap">HISTORY</span></div>
+                <div class="row__ctl">
+                  <button class="toggle" aria-pressed="true"></button>
+                  <span class="row__val">LOCAL ONLY</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="module">
+              <div class="module__head"><span class="cn">系统信息</span><span class="en t-cap">SYSTEM</span></div>
+              <div class="mrow"><span class="mrow__k">REV</span><span class="mrow__v">0.1.0</span></div>
+              <div class="mrow"><span class="mrow__k">PROFILE</span><span class="mrow__v">WEB</span></div>
+              <div class="mrow"><span class="mrow__k">CORE</span><span class="mrow__v">ONLINE</span></div>
+              <div class="mrow"><span class="mrow__k">SESSION</span><span class="mrow__v">ACTIVE</span></div>
+            </div>
+          </section>
+
+          <!-- ── 账号与余额 ───────────────────────────────────────────── -->
+          <section class="panel" data-panel="account" hidden>
+            <div class="module">
+              <div class="module__head"><span class="cn">账号</span><span class="en t-cap">ACCOUNT</span></div>
+              <div class="row">
+                <div class="row__label"><span class="cn">已登录</span><span class="en t-cap">SIGNED IN</span></div>
+                <div class="row__ctl">
+                  <span class="t-body" style="color:var(--ink)">139******62</span>
+                  <span class="dot dot--ok"></span>
+                  <span class="row__val">DEEPSEEK</span>
+                </div>
+              </div>
+            </div>
+            <div class="module">
+              <div class="module__head"><span class="cn">余额</span><span class="en t-cap">BALANCE</span></div>
+              <div class="row">
+                <div class="row__label"><span class="cn">充值余额</span><span class="en t-cap">TOP-UP</span></div>
+                <div class="row__ctl"><span class="t-num" style="font-size:var(--fs-md)">¥0.00</span><span class="row__val">CNY</span></div>
+              </div>
+              <div class="row">
+                <div class="row__label"><span class="cn">赠金余额</span><span class="en t-cap">GRANT</span></div>
+                <div class="row__ctl"><span class="t-num" style="font-size:var(--fs-md)">¥2.93</span><span class="row__val">CNY</span></div>
+              </div>
+              <div class="row">
+                <div class="row__label"><span class="cn">操作</span><span class="en t-cap">ACTIONS</span></div>
+                <div class="row__ctl">
+                  <button class="btn">查询用量</button>
+                  <button class="btn" style="border-color:var(--accent);color:var(--accent)">充值</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ── 模型 ─────────────────────────────────────────────────── -->
+          <section class="panel" data-panel="model" hidden>
+            <div class="module">
+              <div class="module__head"><span class="cn">当前模型</span><span class="en t-cap">ACTIVE MODEL</span></div>
+              <div class="row">
+                <div class="row__label"><span class="cn">DeepSeek V4.1-Flash</span><span class="en t-cap">DEFAULT · CHAT</span></div>
+                <div class="row__ctl"><span class="dot dot--on"></span><span class="row__val">READY</span></div>
+              </div>
+            </div>
+            <div class="module">
+              <div class="module__head"><span class="cn">参数</span><span class="en t-cap">PARAMETERS</span></div>
+              <div class="mrow"><span class="mrow__k">STATUS</span><span class="meter"><b style="width:100%"></b></span><span class="mrow__v">ONLINE</span></div>
+              <div class="mrow"><span class="mrow__k">CONTEXT</span><span class="meter"><b style="width:82%"></b></span><span class="mrow__v">1.0M</span></div>
+              <div class="mrow"><span class="mrow__k">SPEED</span><span class="meter"><b style="width:64%"></b></span><span class="mrow__v">FAST</span></div>
+              <div class="mrow"><span class="mrow__k">REASONING</span><span class="meter"><b style="width:46%"></b></span><span class="mrow__v">MED</span></div>
+              <div class="mrow"><span class="mrow__k">OUTPUT</span><span class="meter"><b style="width:70%"></b></span><span class="mrow__v">384K</span></div>
+            </div>
+          </section>
+
+          <!-- ── 内置插件 ─────────────────────────────────────────────── -->
+          <section class="panel" data-panel="plugins" hidden>
+            <div class="module">
+              <div class="module__head"><span class="cn">已安装</span><span class="en t-cap">INSTALLED · 04</span></div>
+              <div class="plist">
+                <div class="plist__row">
+                  <div><span class="plist__name"><span class="dot dot--on"></span>dsh-better-sidebar</span><span class="plist__desc">右侧栏工作台：文件树、编辑器、Git、任务</span></div>
+                  <span class="plist__ver">0.24.1</span>
+                  <button class="toggle" aria-pressed="true"></button>
+                </div>
+                <div class="plist__row">
+                  <div><span class="plist__name"><span class="dot dot--on"></span>dsh-harness-os-theme</span><span class="plist__desc">暖纸白 + 橙色强调的令牌主题</span></div>
+                  <span class="plist__ver">0.1.0</span>
+                  <button class="toggle" aria-pressed="true"></button>
+                </div>
+                <div class="plist__row">
+                  <div><span class="plist__name"><span class="dot dot--on"></span>dsh-startup-screen</span><span class="plist__desc">启动画面与六幕启动动画</span></div>
+                  <span class="plist__ver">1.0.0</span>
+                  <button class="toggle" aria-pressed="true"></button>
+                </div>
+                <div class="plist__row">
+                  <div><span class="plist__name"><span class="dot"></span>dsh-whale-widget</span><span class="plist__desc">余额小鲸鱼挂件</span></div>
+                  <span class="plist__ver">0.3.18</span>
+                  <button class="toggle"></button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ── Agent 预设 ───────────────────────────────────────────── -->
+          <section class="panel" data-panel="presets" hidden>
+            <div class="module">
+              <div class="module__head"><span class="cn">预设</span><span class="en t-cap">AGENT PRESETS</span></div>
+              <div class="alist">
+                <div class="alist__row" aria-current="true"><span class="alist__no">01</span><span class="alist__name">Research</span><span class="alist__state">ACTIVE</span></div>
+                <div class="alist__row"><span class="alist__no">02</span><span class="alist__name">Design</span><span class="alist__state">INACTIVE</span></div>
+                <div class="alist__row"><span class="alist__no">03</span><span class="alist__name">Coding</span><span class="alist__state">INACTIVE</span></div>
+                <div class="alist__row"><span class="alist__no">04</span><span class="alist__name">Writing</span><span class="alist__state">INACTIVE</span></div>
+                <div class="alist__row"><span class="alist__no">05</span><span class="alist__name">Custom</span><span class="alist__state">INACTIVE</span></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ── 启动动画 ─────────────────────────────────────────────── -->
+          <section class="panel" data-panel="boot" hidden>
+            <div class="module">
+              <div class="module__head"><span class="cn">启动序列</span><span class="en t-cap">BOOT SEQUENCE</span></div>
+              <div class="boot">
+                <div class="boot__step"><span class="boot__no">01</span><span class="boot__line"><span class="boot__node"></span></span><span class="boot__name">Access Permission</span><span class="boot__state">PASSED</span></div>
+                <div class="boot__step"><span class="boot__no">02</span><span class="boot__line"><span class="boot__node"></span></span><span class="boot__name">Identity Verification</span><span class="boot__state">PASSED</span></div>
+                <div class="boot__step"><span class="boot__no">03</span><span class="boot__line"><span class="boot__node"></span></span><span class="boot__name">System Initialization</span><span class="boot__state">PASSED</span></div>
+                <div class="boot__step boot__step--current"><span class="boot__no">04</span><span class="boot__line"><span class="boot__node"></span></span><span class="boot__name">System Check</span><span class="boot__state">RUNNING</span></div>
+                <div class="boot__step"><span class="boot__no">05</span><span class="boot__line"><span class="boot__node"></span></span><span class="boot__name">Verification</span><span class="boot__state">PENDING</span></div>
+                <div class="boot__step"><span class="boot__no">06</span><span class="boot__line"><span class="boot__node"></span></span><span class="boot__name">Harness OS</span><span class="boot__state">PENDING</span></div>
+              </div>
+            </div>
+            <div class="module">
+              <div class="module__head"><span class="cn">播放</span><span class="en t-cap">PLAYBACK</span></div>
+              <div class="row">
+                <div class="row__label"><span class="cn">每次会话播放</span><span class="en t-cap">PER SESSION</span></div>
+                <div class="row__ctl"><button class="toggle" aria-pressed="true"></button><span class="row__val">ONCE</span></div>
+              </div>
+              <div class="row">
+                <div class="row__label"><span class="cn">允许跳过</span><span class="en t-cap">ALLOW SKIP</span></div>
+                <div class="row__ctl"><button class="toggle" aria-pressed="true"></button><span class="row__val">ESC</span></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ── 侧边卡片 ─────────────────────────────────────────────── -->
+          <section class="panel" data-panel="cards" hidden>
+            <div class="module">
+              <div class="module__head"><span class="cn">卡片</span><span class="en t-cap">SIDE CARDS</span></div>
+              <div class="plist">
+                <div class="plist__row"><div><span class="plist__name"><span class="dot dot--on"></span>文件</span><span class="plist__desc">工作区文件树与预览</span></div><span class="plist__ver">PRIMARY</span><button class="toggle" aria-pressed="true"></button></div>
+                <div class="plist__row"><div><span class="plist__name"><span class="dot dot--on"></span>文件变动</span><span class="plist__desc">Git 视角与本轮改动</span></div><span class="plist__ver">SECONDARY</span><button class="toggle" aria-pressed="true"></button></div>
+                <div class="plist__row"><div><span class="plist__name"><span class="dot"></span>任务管理</span><span class="plist__desc">子代理拓扑与后台任务</span></div><span class="plist__ver">OPTIONAL</span><button class="toggle"></button></div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+(function () {
+  /* 系统时间 */
+  var clock = document.getElementById('clock');
+  function pad(n) { return n < 10 ? '0' + n : String(n); }
+  function tick() {
+    if (!clock) return;
+    var d = new Date();
+    clock.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+  }
+  tick(); setInterval(tick, 1000);
+
+  /* 设置导航：切换面板，活动项 = 橙色左边线 */
+  var navItems = document.querySelectorAll('.setnav__item');
+  var panels = document.querySelectorAll('.panel');
+  Array.prototype.forEach.call(navItems, function (item) {
+    item.addEventListener('click', function () {
+      Array.prototype.forEach.call(navItems, function (n) { n.removeAttribute('aria-current'); });
+      item.setAttribute('aria-current', 'true');
+      var want = item.getAttribute('data-panel');
+      Array.prototype.forEach.call(panels, function (p) {
+        p.hidden = p.getAttribute('data-panel') !== want;
+      });
+    });
+  });
+
+  /* Segmented control：组内单选 */
+  Array.prototype.forEach.call(document.querySelectorAll('.seg[data-seg]'), function (seg) {
+    var btns = seg.querySelectorAll('button');
+    Array.prototype.forEach.call(btns, function (b) {
+      b.addEventListener('click', function () {
+        Array.prototype.forEach.call(btns, function (x) { x.setAttribute('aria-pressed', 'false'); });
+        b.setAttribute('aria-pressed', 'true');
+      });
+    });
+  });
+
+  /* Toggle：翻转 aria-pressed（视觉状态全部由 CSS 从 aria-pressed 派生）*/
+  Array.prototype.forEach.call(document.querySelectorAll('.toggle'), function (t) {
+    t.addEventListener('click', function () {
+      var on = t.getAttribute('aria-pressed') === 'true';
+      t.setAttribute('aria-pressed', on ? 'false' : 'true');
+      /* 「动画」开关联动全局动效 */
+      if (t.hasAttribute('data-motion')) {
+        document.documentElement.classList.toggle('no-motion', on);
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

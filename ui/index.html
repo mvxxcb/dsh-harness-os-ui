@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>HARNESS OS · Desktop UI Design System</title>
+<link rel="stylesheet" href="styles/tokens.css">
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/components.css">
+<style>
+  /* 封面页专用：不改动设计系统，只做本页排布 */
+  .cover { max-width: 1180px; margin: 0 auto; padding: var(--s8) var(--s6); }
+  .cover__kicker { display: flex; align-items: center; gap: var(--s3); margin-bottom: var(--s5); }
+  .cover h1 { font-size: 44px; font-weight: 700; letter-spacing: 0.08em; margin: 0; }
+  .cover h1 small { display: block; margin-top: var(--s3); font-family: var(--mono); font-size: var(--fs-cap);
+                    letter-spacing: var(--ls-hero); text-transform: uppercase; color: var(--ink-3); font-weight: 400; }
+  .cover__lede { margin-top: var(--s5); max-width: 62ch; font-size: var(--fs-md); line-height: 1.8; color: var(--ink-2); }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s5); margin-top: var(--s7); }
+  .card {
+    display: block; padding: var(--s5);
+    border: 1px solid var(--line-l2); border-radius: var(--r-md);
+    background: var(--surface); position: relative;
+  }
+  .card:hover { border-color: var(--line-l4); }
+  .card__no { font-family: var(--mono); font-size: var(--fs-meta); letter-spacing: var(--ls-meta); color: var(--accent); }
+  .card__t { display: block; margin-top: var(--s3); font-size: var(--fs-lg); font-weight: 600; }
+  .card__en { display: block; margin-top: 2px; }
+  .card__d { display: block; margin-top: var(--s3); font-size: var(--fs-sm); color: var(--ink-3); line-height: 1.7; }
+  .card__go { display: inline-flex; align-items: center; gap: 6px; margin-top: var(--s4); font-size: var(--fs-sm); color: var(--ink-2); }
+  .card__go::after { content: "→"; color: var(--accent); }
+
+  .sec { margin-top: var(--s8); }
+  .sec__h { display: flex; align-items: baseline; gap: var(--s3); padding-bottom: var(--s3); border-bottom: 1px solid var(--line-l2); }
+  .sec__h .cn { font-size: var(--fs-lg); font-weight: 600; }
+
+  .sw { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s3); margin-top: var(--s5); }
+  .sw__i { border: 1px solid var(--line-l2); border-radius: var(--r-sm); overflow: hidden; }
+  .sw__c { height: 64px; }
+  .sw__m { padding: var(--s2) var(--s3); background: var(--surface); }
+  .sw__m b { display: block; font-family: var(--mono); font-size: var(--fs-meta); letter-spacing: var(--ls-meta); color: var(--ink-2); font-weight: 400; }
+  .sw__m span { display: block; font-family: var(--mono); font-size: var(--fs-micro); color: var(--ink-4); }
+
+  .type { display: flex; flex-direction: column; margin-top: var(--s5); }
+  .type__r { display: grid; grid-template-columns: 150px 1fr auto; align-items: baseline; gap: var(--s4);
+             padding: var(--s3) 0; border-top: 1px solid var(--line-l1); }
+  .type__r:first-child { border-top: 0; }
+  .type__k { font-family: var(--mono); font-size: var(--fs-meta); letter-spacing: var(--ls-meta); text-transform: uppercase; color: var(--ink-4); }
+  .type__v { font-family: var(--mono); font-size: var(--fs-meta); color: var(--ink-4); letter-spacing: var(--ls-meta); }
+
+  .comps { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s4); margin-top: var(--s5); }
+  .do { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s5); margin-top: var(--s5); }
+  .do ul { display: flex; flex-direction: column; gap: var(--s2); }
+  .do li { font-size: var(--fs-sm); color: var(--ink-2); line-height: 1.7; }
+  .do li::before { content: "— "; color: var(--ink-4); }
+  .do .no li::before { content: "× "; color: var(--ink-4); }
+</style>
+</head>
+<body>
+<div class="corners" aria-hidden="true"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div>
+
+<div class="cover">
+  <div class="cover__kicker">
+    <span class="t-meta t-meta--ink">REV 0.1.0</span>
+    <span class="t-meta">·</span>
+    <span class="t-meta t-meta--ink">DESIGN SYSTEM</span>
+    <span class="ticks" aria-hidden="true"><i></i><i></i><i class="on"></i><i></i><i></i></span>
+    <span class="dot dot--on"></span>
+    <span class="t-meta t-accent">READY</span>
+  </div>
+
+  <h1>HARNESS OS<small>Desktop UI · Design System</small></h1>
+  <p class="cover__lede">
+    进入系统后的桌面端界面。两张独立界面共用同一套设计语言：暖纸白底、黑色主文字、
+    浅灰辅助、极少量 Deep Orange 作强调；极细结构线、精密网格、大留白与 Monospace 系统信息。
+    未来感由<strong>排版、网格、比例、留白与状态信息</strong>表达，而不是靠堆叠装饰。
+  </p>
+
+  <div class="grid2">
+    <a class="card" href="home.html">
+      <span class="card__no">01</span>
+      <span class="card__t">HOME / 工作台</span>
+      <span class="card__en t-cap">WORKSPACE ENTRY</span>
+      <span class="card__d">AI Core 圆环 · 中英双语主标 · 输入区与快捷操作 · 底部 HUD 与进度条</span>
+      <span class="card__go">打开界面</span>
+    </a>
+    <a class="card" href="settings.html">
+      <span class="card__no">02</span>
+      <span class="card__t">SETTINGS / 设置</span>
+      <span class="card__en t-cap">SYSTEM CONFIGURATION</span>
+      <span class="card__d">七个面板 · 模块化纵向布局 · 精密 Segmented Control 与 Toggle · 启动序列 Timeline</span>
+      <span class="card__go">打开界面</span>
+    </a>
+  </div>
+
+  <section class="sec">
+    <div class="sec__h"><span class="cn">色</span><span class="en t-cap">PALETTE</span></div>
+    <div class="sw">
+      <div class="sw__i"><div class="sw__c" style="background:#f1efec"></div><div class="sw__m"><b>PAPER</b><span>#F1EFEC · 页面底</span></div></div>
+      <div class="sw__i"><div class="sw__c" style="background:#14130f"></div><div class="sw__m"><b>INK</b><span>#14130F · 主文字</span></div></div>
+      <div class="sw__i"><div class="sw__c" style="background:#8b8780"></div><div class="sw__m"><b>INK / 3</b><span>#8B8780 · 辅助</span></div></div>
+      <div class="sw__i"><div class="sw__c" style="background:#ff7500"></div><div class="sw__m"><b>ACCENT</b><span>#FF7500 · 唯一暖色</span></div></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec__h"><span class="cn">字</span><span class="en t-cap">TYPOGRAPHY</span></div>
+    <div class="type">
+      <div class="type__r"><span class="type__k">HERO / CN</span><span style="font-size:42px;font-weight:700;letter-spacing:.14em">探索未知之境</span><span class="type__v">42 / 700 / .14EM</span></div>
+      <div class="type__r"><span class="type__k">CAPS / EN</span><span class="t-cap" style="color:var(--ink-2)">Explore the unknown</span><span class="type__v">11 / 400 / .18EM</span></div>
+      <div class="type__r"><span class="type__k">BODY / CN</span><span>描述你想要构建的内容，例如：构建一个基于知识库的问答系统…</span><span class="type__v">13 / 400</span></div>
+      <div class="type__r"><span class="type__k">META / MONO</span><span class="t-meta">REV 0.1.0 · WEB PROFILE · 18:32:04</span><span class="type__v">10 / .14EM</span></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec__h"><span class="cn">组件</span><span class="en t-cap">COMPONENTS</span></div>
+    <div class="comps">
+      <button class="btn">打开配置文件</button>
+      <div class="seg" data-seg><button aria-pressed="true">LIGHT</button><button>DARK</button><button>SYSTEM</button></div>
+      <button class="toggle" aria-pressed="true"></button>
+      <button class="toggle"></button>
+      <span class="pill">文件上传</span>
+      <span class="pill" aria-pressed="true">生成图像</span>
+      <span class="sig" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="t-meta t-meta--ink">[ 01 / 06 ] HOME</span>
+      <span class="dot dot--on"></span>
+      <span class="dot dot--ok"></span>
+      <span class="dot"></span>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec__h"><span class="cn">取舍</span><span class="en t-cap">WHAT WE DID NOT DO</span></div>
+    <div class="do">
+      <ul>
+        <li>靠 1px 细线建立层级，而不是投影与卡片</li>
+        <li>橙色只用于状态与活动，全屏出现次数控制在个位数</li>
+        <li>英文一律 ALL CAPS + 宽字距，与中文形成明确层级差</li>
+        <li>系统信息一律 Monospace + 表格数字，走时不抖动</li>
+        <li>辅助线落在有意义的位置，不为了"有辅助线"而横切画面</li>
+      </ul>
+      <ul class="no">
+        <li>渐变 / 玻璃拟态 / 霓虹 / Cyberpunk</li>
+        <li>游戏 HUD 与无意义科技装饰</li>
+        <li>大面积 Card 与强阴影</li>
+        <li>过度圆润的圆角与过大的按钮</li>
+        <li>3D、金属、明显纹理</li>
+      </ul>
+    </div>
+  </section>
+
+  <div style="margin-top:var(--s8);padding-top:var(--s4);border-top:1px solid var(--line-l2);display:flex;align-items:center;gap:var(--s3)">
+    <span class="t-meta">HARNESS OS</span>
+    <span class="t-meta">×</span>
+    <span class="t-meta">UI / UX DESIGN</span>
+    <span style="flex:1"></span>
+    <span class="t-meta">WARM PAPER · INK · DEEP ORANGE</span>
+    <span class="hud__mark" aria-hidden="true"></span>
+  </div>
+</div>
+
+<script>
+  Array.prototype.forEach.call(document.querySelectorAll('.seg[data-seg]'), function (seg) {
+    var btns = seg.querySelectorAll('button');
+    Array.prototype.forEach.call(btns, function (b) {
+      b.addEventListener('click', function () {
+        Array.prototype.forEach.call(btns, function (x) { x.setAttribute('aria-pressed', 'false'); });
+        b.setAttribute('aria-pressed', 'true');
+      });
+    });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.toggle'), function (t) {
+    t.addEventListener('click', function () {
+      t.setAttribute('aria-pressed', t.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+    });
+  });
+</script>
+</body>
+</html>

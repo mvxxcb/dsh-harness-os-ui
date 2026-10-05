@@ -1,0 +1,13 @@
+# dsh-harness-os-ui — bundle patch
+#
+# 把插件的 host 行挂进 profile 的配置树。Web 半由 package.json 的 dsh.client 声明。
+#
+# 刻意不声明任何 @deepseek-ai/dsh-* peerDependency：
+# DSH 自某个版本起把 peer 当作**启动期硬约束**，范围不满足就把整行
+# row.disabled = true，且只在 stderr 留一行 —— 表现为"装上了但完全没反应"。
+# 本插件只读稳定公开服务（webServer / connection / slots / locale），
+# 样式全部消费宿主的 --dsw-* 令牌，没有版本耦合。
+
+- insert:
+    - id: harness-os-ui
+      name: dsh-harness-os-ui

@@ -1,0 +1,186 @@
+/* ============================================================================
+ * HARNESS OS · 基础层（Base）
+ * ----------------------------------------------------------------------------
+ * 排版 · 页面骨架 · 结构辅助线 · 材质噪点 · HUD 基元
+ * 只定义"是什么"，不定义"哪个组件"——组件规则在 components.css。
+ * ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: var(--fs-base);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 材质：极轻微纸张 / 数字噪点。几乎不可察觉，只是让大面积底色不"死"。 ──── */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ============================================================================
+ * 排版
+ * ========================================================================== */
+
+h1, h2, h3, p, ul, ol, figure { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+
+/* 中文主标：粗、紧、大 */
+.t-cn       { font-size: var(--fs-lg);  font-weight: 600; letter-spacing: 0.01em; }
+.t-hero     { font-size: var(--fs-hero); font-weight: 700; letter-spacing: 0.06em; }
+.t-title    { font-size: var(--fs-xl);  font-weight: 600; letter-spacing: 0.08em; }
+
+/* 英文辅助：ALL CAPS + 宽字距。与中文形成明确层级差 */
+.t-cap {
+  font-family: var(--mono);
+  font-size: var(--fs-cap);
+  letter-spacing: var(--ls-cap);
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 400;
+}
+
+/* 系统信息：极小 Monospace */
+.t-meta {
+  font-family: var(--mono);
+  font-size: var(--fs-meta);
+  letter-spacing: var(--ls-meta);
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+.t-meta--ink { color: var(--ink-3); }
+.t-accent    { color: var(--accent); }
+.t-num       { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+.t-sub  { font-size: var(--fs-sm); color: var(--ink-3); }
+.t-body { font-size: var(--fs-base); color: var(--ink-2); }
+
+/* ============================================================================
+ * 页面骨架：固定左侧栏 + 主内容区
+ * ========================================================================== */
+
+.app {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: var(--rail-w) 1fr;
+  height: 100vh;
+  min-height: 640px;
+  overflow: hidden;
+}
+
+/* ── 结构辅助线：极细，形成建筑制图 / 工业控制台的空间结构 ──────────────── */
+.guides { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+.guides i { position: absolute; display: block; }
+.guides .v { top: 0; bottom: 0; width: 1px; background: var(--line-l1); }
+.guides .h { left: 0; right: 0; height: 1px; background: var(--line-l1); }
+
+/* ── 屏幕四角 L 型定位角标：非常细 ──────────────────────────────────────── */
+.corners { position: absolute; inset: var(--s4); pointer-events: none; z-index: 3; }
+.corners i { position: absolute; width: 14px; height: 14px; }
+.corners i::before, .corners i::after { content: ""; position: absolute; background: var(--line-l4); }
+.corners i::before { width: 14px; height: 1px; }
+.corners i::after  { width: 1px; height: 14px; }
+.corners .tl { top: 0;    left: 0; }
+.corners .tr { top: 0;    right: 0; }
+.corners .tr::before { right: 0; } .corners .tr::after { right: 0; }
+.corners .bl { bottom: 0; left: 0; }
+.corners .bl::before { bottom: 0; } .corners .bl::after { bottom: 0; }
+.corners .br { bottom: 0; right: 0; }
+.corners .br::before { bottom: 0; right: 0; } .corners .br::after { bottom: 0; right: 0; }
+
+/* ── 主内容区 ──────────────────────────────────────────────────────────── */
+.main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: var(--page-pad) var(--page-pad) 0;
+}
+
+/* 主区顶部系统信息条（HOME 与 SETTINGS 共用） */
+.sysbar {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  padding-bottom: var(--s3);
+  border-bottom: 1px solid var(--line-l2);
+}
+.sysbar .spacer { flex: 1; }
+
+/* 细刻度：一排小竖线，作为状态辅助 */
+.ticks { display: flex; align-items: flex-end; gap: 3px; height: 8px; }
+.ticks i { width: 1px; height: 4px; background: var(--line-l4); }
+.ticks i:nth-child(3n) { height: 8px; }
+.ticks i.on { background: var(--accent); height: 8px; }
+
+/* ============================================================================
+ * HUD 基元
+ * ========================================================================== */
+
+/* 橙色信号柱 */
+.sig { display: flex; align-items: flex-end; gap: 2px; height: 14px; }
+.sig i { width: 2px; background: var(--accent); }
+.sig i:nth-child(1) { height: 5px;  opacity: 0.45; }
+.sig i:nth-child(2) { height: 8px;  opacity: 0.6; }
+.sig i:nth-child(3) { height: 11px; opacity: 0.8; }
+.sig i:nth-child(4) { height: 14px; }
+
+/* 微型进度条：黑色进度线 + 一个橙色活动节点 */
+.pbar { position: relative; height: 3px; background: var(--surface-sunken); }
+.pbar > b { position: absolute; inset: 0 auto 0 0; width: 38%; background: var(--ink); }
+.pbar > u {
+  position: absolute; top: 50%; left: 38%;
+  width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px;
+  background: var(--accent); border-radius: var(--r-pill);
+}
+
+/* 状态点 */
+.dot { display: inline-block; width: 5px; height: 5px; border-radius: var(--r-pill); background: var(--idle); }
+.dot--on   { background: var(--accent); }
+.dot--ok   { background: var(--ok); }
+
+/* 极细横向参数条（MODEL 用） */
+.meter { position: relative; height: 2px; background: var(--line-l2); }
+.meter > b { position: absolute; inset: 0 auto 0 0; background: var(--ink); }
+
+/* 短横线 / 分隔 */
+.rule   { height: 1px; background: var(--line-l2); border: 0; margin: 0; }
+.rule--s { width: 16px; height: 1px; background: var(--line-l4); }
+
+/* ============================================================================
+ * 动画：只允许"几乎察觉不到"的运动
+ * ========================================================================== */
+
+@keyframes hos-spin      { to { transform: rotate(360deg); } }
+@keyframes hos-spin-rev  { to { transform: rotate(-360deg); } }
+@keyframes hos-pulse     { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+.spin-slow     { animation: hos-spin 96s linear infinite; transform-origin: center; }
+.spin-slow-rev { animation: hos-spin-rev 140s linear infinite; transform-origin: center; }
+.pulse         { animation: hos-pulse 3.2s ease-in-out infinite; }
+
+/* 尊重系统偏好：关掉动画时全部静止 */
+@media (prefers-reduced-motion: reduce) {
+  .spin-slow, .spin-slow-rev, .pulse { animation: none; }
+}
+/* 设置里「动画 / HUD 效果」关闭时由 JS 加上这个类 */
+.no-motion .spin-slow,
+.no-motion .spin-slow-rev,
+.no-motion .pulse { animation: none; }
