@@ -166,6 +166,73 @@ if (/slots\.register\(\s*\{\s*name:\s*'conversation\.composer\.dock'/.test(clien
 // 槽位 id 必须与主题插件的设置行 id 不同（否则会顶掉那一格）
 if (clientSrc.includes("id: 'dsh-harness-os-theme'")) fail('设置行 id 与主题插件重名，会顶掉对方的设置格')
 
+// ── 5.5 诊断门控：发布版不允许任何 localStorage 写入 ───────────────────────
+// HANDOFF 3.1：probeOverlay / probeLayoutTree / recordDiag / startBlankCapture
+// 都只为调试服务（每次写 2–8 KB）。它们必须收拢在 runDiagnostics 一个入口之后，
+// 由编译期常量 DEBUG_DIAG=false 与运行期调试键双重拦截。这里的断言防止
+// 有人把诊断调用挪回 apply/渲染路径，让发布版重新开始写 localStorage。
+if (!/var DEBUG_DIAG = false/.test(clientCode)) {
+  fail('DEBUG_DIAG 必须显式声明为 var DEBUG_DIAG = false（发布形态；打开诊断走调试键，不是改这里）')
+}
+if (!clientCode.includes('if (!DEBUG_DIAG) return false')) {
+  fail('diagEnabled 缺少 DEBUG_DIAG 常量闸 —— 诊断只受运行期开关保护是不够的')
+}
+const diagStart = clientCode.indexOf('function runDiagnostics')
+const listenersStart = clientCode.indexOf('var listeners = []')
+if (diagStart < 0 || listenersStart < 0 || diagStart > listenersStart) {
+  fail('找不到 runDiagnostics（诊断调用必须集中在此函数内，并受双闸保护）')
+} else {
+  if (!clientCode.slice(diagStart, listenersStart).includes('if (!diagEnabled()) return')) {
+    fail('runDiagnostics 入口缺少 diagEnabled() 拦截')
+  }
+  // startBlankCapture 只允许被 runDiagnostics 调起
+  const capStart = clientCode.indexOf('function startBlankCapture')
+  const capEnd = clientCode.indexOf('function rectOf')
+  const findCalls = (name) => {
+    const sites = []
+    let from = 0
+    for (;;) {
+      const i = clientCode.indexOf(`${name}(`, from)
+      if (i < 0) break
+      from = i + 1
+      if (clientCode.slice(Math.max(0, i - 9), i).endsWith('function ')) continue // 定义处
+      sites.push(i)
+    }
+    return sites
+  }
+  const captureRegion = capStart >= 0 && capEnd > capStart ? [capStart, capEnd] : null
+  const runRegion = [diagStart, listenersStart]
+  const inRegion = (i, r) => r !== null && i >= r[0] && i < r[1]
+  const outsideCapture = findCalls('startBlankCapture').filter((i) => !inRegion(i, runRegion))
+  if (outsideCapture.length) fail('startBlankCapture 被 runDiagnostics 之外的代码调起 —— 发布版会起 80s 轮询并写 localStorage')
+  const outsideDiag = findCalls('recordDiag').filter((i) => !inRegion(i, runRegion) && !inRegion(i, captureRegion))
+  if (outsideDiag.length) fail('recordDiag 被 runDiagnostics / startBlankCapture 之外的代码调起 —— 发布版会写 localStorage')
+
+  // localStorage 写入只允许出现在 writePrefs（用户偏好）与 recordDiag（已门控）里
+  const writeSites = []
+  let wfrom = 0
+  for (;;) {
+    const i = clientCode.indexOf('.setItem(', wfrom)
+    if (i < 0) break
+    wfrom = i + 1
+    writeSites.push(i)
+  }
+  const wpStart = clientCode.indexOf('function writePrefs')
+  const wpEnd = clientCode.indexOf('function installStyle')
+  const rdStart = clientCode.indexOf('function recordDiag')
+  const rdEnd = clientCode.indexOf('function startBlankCapture')
+  const writeRegions = [
+    wpStart >= 0 && wpEnd > wpStart ? [wpStart, wpEnd] : null,
+    rdStart >= 0 && rdEnd > rdStart ? [rdStart, rdEnd] : null
+  ]
+  const badWrites = writeSites.filter((i) => !writeRegions.some((r) => inRegion(i, r)))
+  if (badWrites.length) {
+    fail(`client.js 存在 writePrefs / recordDiag 之外的 localStorage 写入（${badWrites.length} 处）`)
+  } else if (!outsideCapture.length && !outsideDiag.length) {
+    notes.push('诊断门控：DEBUG_DIAG=false 双闸 + 诊断调用/写入点全部收拢在白名单函数内')
+  }
+}
+
 // ── 7. 偏好键一致性 ────────────────────────────────────────────────────────
 // 曾经的缺陷：readPrefs 手写初始化只列了 5 个键，漏掉后加的 pills / hero，
 // 于是 prefs.pills 恒为 undefined（快捷操作永不渲染）、patch('hero') 恒写 false

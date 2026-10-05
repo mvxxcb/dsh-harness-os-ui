@@ -145,6 +145,13 @@ composerSeatRect {x:280, y:938, w:1421, h:128} ← 顶边 938 → 胶囊整体�
 
 ## 3. 已知缺陷(具体、可修)
 
+> **2026-10-05 更新:3.1 / 3.2 / 3.3 / 3.4 / 3.5 / 3.6 已在本轮修复**(v0.7.0):
+> 诊断收拢到 `runDiagnostics` 双闸、两套轮询合并为单一锚点订阅、辅助线对齐实测边缘、
+> 品牌标记移到内容区左下、设置行改宿主 PreferenceRow/Switch 形态、偏好加模块级缓存。
+> 门禁新增第 5 组「诊断门控」断言。3.7 / 3.8 仍在。
+> 行为自证:`E:\dsh\scratch\plugin-audit\smoke-harness-os-ui\`(真实浏览器 23 项断言全过)。
+> **视觉结论仍以用户截图为准。**
+
 ### 3.1 诊断代码混在生产产物里 🔴
 
 `lib/client.js`(39 KB / 763 行)里带着三块**只为调试服务**的东西:
@@ -296,10 +303,11 @@ composerSeatRect  {x:280, y:881, w:1421, h:185}   ← 视口高 1066
 
 ### 5.2 待用户确认的两处冲突(已记录在 `docs/BRIEF.md`)
 
-1. **品牌写法**:需求文本写 `HARNESSS`(三 S),参考图与启动动画是 `HARNESS`(两 S)。
-   当前实现统一用**两 S**。改动涉及两处(主题包的 `brand__badge`、UI 的启动序列第 6 项)。
-2. **卡片布局冲突**:参考图标注第 5 条说"卡片式布局",而正文说"不要大面积卡片"。
-   当前实现用**模块化分区**替代卡片堆叠。
+> **2026-10-05 部分已拍板:**
+> 1. **品牌写法 → `HARNESSS`(三 S)**,以需求原文为准;渲染位已全部改齐(见 BRIEF 5.1)。
+> 2. **HUD/胶囊显示时机(4.5)→ 维持仅空白会话显示**,不常驻。
+> 卡片布局冲突(参考图标注第 5 条 vs 正文"不要大面积卡片")本轮未询问,
+> 实现维持**模块化分区**现状,如需改卡片式再议。
 
 ### 5.3 两个仓库职责有重叠
 
@@ -359,7 +367,7 @@ UI 插件用 `id: 'dsh-harness-os-ui'`(order 22);主题包用 `'dsh-harness-os-t
 
 | 陷阱 | 表现 | 应对 |
 |---|---|---|
-| **`git` 无法访问 GitHub** 🔴 | 所有 HTTPS 握手失败:`schannel: AcquireCredentialsHandle failed: SEC_E_NO_CREDENTIALS (0x8009030e)`。`curl` / `Invoke-WebRequest` 同样 | 用 `gh`(Go TLS)走 **Git Data API** 推送。现成脚本:`E:\dsh\scratch\push-dsh-harness-os-ui.ps1`(已支持 `-Message`) |
+| **`git` 直连 GitHub** 🟡 | 直连被重置(`Connection was reset`);走本机代理时**只有 7890 端口通**,7891 握手失败 | 2026-10-05 已配置:`git config --global http.https://github.com/.proxy http://127.0.0.1:7890`(依赖代理软件在跑;撤销 `--unset`)。`gh` 本就可用(keyring 已登录 mvxxcb),推 Git Data API 的脚本仍是备选 |
 | **`app.asar\dsh\` 是虚拟路径** | 文件系统层面不存在,rg/grep 全部 `os error 3` | asar 是打包档,**按字节解析**:0..3=4,4..7=header pickle 大小,8..11/12..15=JSON 大小,16..=JSON,数据区起点 `8+headerSize`。现成脚本:`E:\dsh\scratch\plugin-audit\asar-extract.py` |
 | **无头 Chrome 需要提权** | `FATAL:mojo platform_channel.cc:112 Check failed: 拒绝访问 (0x5)` | 该命令需 `sandbox_permissions: danger-full-access`。脚本:`harness-os-ui/scripts/shoot.ps1` |
 | **会话日志是多帧 zstd** 🔴 | `zlib.zstdDecompressSync` **只解第一帧** —— 3.5MB 的档只解出 1 条记录 | 按魔数 `28 b5 2f fd` 切帧逐帧解。现成脚本:`E:\dsh\scratch\plugin-audit\count-compactions.mjs` |
@@ -502,6 +510,7 @@ E:\dsh\scratch\
 │   └─ docs\BRIEF.md              用户的设计需求（251 行）
 ├─ push-dsh-harness-os-ui.ps1     推送脚本（gh + Git Data API，支持 -Message）
 └─ plugin-audit\
+    ├─ smoke-harness-os-ui\        UI 插件烟囱测试（build.mjs 生成 smoke.html，真实浏览器断言；server.mjs 起本机 4179）
     ├─ asar-extract.py            asar 按需取文件
     ├─ count-compactions.mjs      会话压缩统计（多帧 zstd）
     ├─ conflict-scan.py           跨插件资源占用扫描
