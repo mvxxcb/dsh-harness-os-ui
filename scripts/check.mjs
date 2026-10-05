@@ -152,8 +152,15 @@ for (const forbidden of [
 // 通配/元素选择器不再单独扫描 —— "每条 CSS 规则都必须以 #harness-os-chrome 开头"
 // 是更强的不变量：`#harness-os-chrome *{…}` 合法，裸 `*{…}` 会在上面那一关就被拦下。
 
-for (const must of ["'shell.overlay'", "'conversation.composer.dock'", "'settings.general.item'", "'dsh-harness-os-ui'", 'var(--dsw-']) {
+for (const must of ["'shell.overlay'", "'settings.general.item'", "'dsh-harness-os-ui'", 'var(--dsw-']) {
   if (!clientSrc.includes(must)) fail(`lib/client.js 缺少必需内容：${must}`)
+}
+
+// 反向断言：快捷操作/HUD 不得重新挂回 conversation.composer.dock。
+// 实测该席位落点没有余量（dockRect y 983→1062 vs 输入座 881→1066），
+// 元素会"存在、尺寸正常、但视觉上看不见"。若有人改回去，这里拦住。
+if (/slots\.register\(\s*\{\s*name:\s*'conversation\.composer\.dock'/.test(clientCode)) {
+  fail('快捷操作/HUD 重新挂回了 conversation.composer.dock —— 该席位落点无余量，实测不可见')
 }
 
 // 槽位 id 必须与主题插件的设置行 id 不同（否则会顶掉那一格）

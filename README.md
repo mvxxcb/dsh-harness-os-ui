@@ -11,13 +11,42 @@
 | 能力 | 挂载点 | 槽位类型 |
 |---|---|---|
 | **帧层装饰**：四角 L 型角标、制图辅助线、底边线 + 橙色活动节点、右下品牌标记 | `shell.overlay` | list · none |
-| **快捷操作胶囊**：文件上传 / 知识库 / 生成图像 | `conversation.composer.dock` | list · none |
-| **底部 HUD 文本带**：信号柱、`[ 01 / 06 ] HOME`、`等待用户输入…`、`REV 0.1.0`、进度条 | `conversation.composer.dock` | list · none |
-| **设置行**：六个开关 + 打开设计预览 | `settings.general.item` | list · none |
+| **快捷操作胶囊**：文件上传 / 知识库 / 生成图像 | `shell.overlay`（实测定位） | list · none |
+| **HUD 文本带**：信号柱、`[ 01 / 06 ] HOME`、`等待用户输入…`、`REV 0.1.0`、进度条 | `shell.overlay`（实测定位） | list · none |
+| **Hero 雷达环**：中央错位圆弧 + 「探索未至之境」，仅空白会话 | `shell.overlay`（实测定位） | list · none |
+| **设置行**：七个开关 + 打开设计预览 | `settings.general.item` | list · none |
 | **设计稿预览**：完整 HOME / SETTINGS 两屏 | host 路由 `/harness-os/ui` | — |
 | **随主题变色** | 颜色一律消费 `var(--dsw-alias-*)` | — |
 
 挂载点全部是 `replaceRisk: none` 的**加性席位** —— 新 id 加在自带条目旁边,绝不顶替。
+
+## 两个由实测数据纠正的决定
+
+这两个决定都不是猜的,是探针读回真实几何数据后改的。**"元素存在"不等于"看得见"** ——
+第一版探针只查 `mounted` 与子节点计数,于是下面两种"看不见"都被误报成已生效。
+
+**① 快捷操作与 HUD 从 `conversation.composer.dock` 移到浮层。**
+该席位的官方定义确实是 *"Ambient entries below the composer card"*,但实测:
+
+```
+dockRect          {x:867, y:983, w:540, h:79}
+composerSeatRect  {x:280, y:881, w:1421, h:185}   // 视口高 1066
+```
+
+输入座一直顶到视口底部,**没有给"下方 HUD"预留任何空间**。内容被塞进输入卡与宿主
+状态行之间一条没有余量的缝里:元素存在、尺寸正常,视觉上却完全看不到。
+改由浮层承载并用实测的输入座位置定位后:
+
+```
+dockRect          {x:630, y:863, w:720, h:63}     // 底边 926
+composerSeatRect  {x:280, y:938, w:1421, h:128}   // 顶边 938 → 整体位于座顶之上
+```
+
+**② 帧层线色从 6%/22% 白提到 `label-tertiary`。**
+实测 `chromeRect {0,0,1707,1066}`、`zIndex 0`、`visibility visible`、祖先
+`.BynINW_overlayLayer {z-index:20}` —— 几何与层级全部正确,仍然看不见,
+原因是 1px 线 + `border-l1`(6% 白)在深色底上再经一次截图缩放就消失了。
+**"克制"不等于"不可见"**,HUD 框线本来就需要能读出来。
 
 ## Hero 雷达环（叠加式，默认关闭）
 
