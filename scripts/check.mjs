@@ -122,7 +122,7 @@ const clientSrc = read('lib/client.js')
 const cssStart = clientSrc.indexOf('var CSS = [')
 const cssEnd = clientSrc.indexOf("].join('\\n')", cssStart)
 // 允许的作用域根：每一条规则都必须挂在其中之一，绝不允许裸选择器。
-const SCOPES = ['#harness-os-chrome', '#harness-os-dock', '#harness-os-hero', '#harness-os-pills']
+const SCOPES = ['#harness-os-chrome', '#harness-os-dock', '#harness-os-hero']
 if (cssStart < 0 || cssEnd < 0) {
   fail('lib/client.js 里找不到 CSS 数组')
 } else {
