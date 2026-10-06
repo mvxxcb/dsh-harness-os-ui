@@ -156,6 +156,14 @@ composerSeatRect {x:280, y:938, w:1421, h:128} ← 顶边 938 → 胶囊整体�
 > 行为自证:`E:\dsh\scratch\plugin-audit\smoke-harness-os-ui\`(真实浏览器 42 项断言全过)。
 > **视觉结论仍以用户截图为准。**
 > (排障备注:一次"装饰全消失"实为客户端热更新的陈旧状态,重启+刷新即恢复,非代码回归。)
+>
+> **⚠️ 冷启动"装饰整层消失"真凶(v0.9.0 修复,探针实锤)**:
+> 插件初始化早于宿主 shell 挂载,此时 `shell.overlay` 尚未由父级 children 表声明,
+> 直接 `slots.register` 抛 `slot "shell.overlay" is not declared` 且被吞 ——
+> 帧层整层不挂载;而 `settings.general.item` 彼时已声明,设置行照常,极具迷惑性。
+> 修复 = 照抄宿主欠费通知条目的 `inject → 惰性 register` 模式 + 3s 兜底注册。
+> 诊断链路教训:localStorage 值是 **UTF-16 存储**、且**只有文件变更才触发 client bundle
+> 重建**(冷启动提供的是上次构建的缓存包)—— 排障时刷新两次再看效果。
 
 ### 3.1 诊断代码混在生产产物里 🔴
 
