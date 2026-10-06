@@ -185,9 +185,6 @@ if (diagStart < 0 || listenersStart < 0 || diagStart > listenersStart) {
   if (!clientCode.slice(diagStart, listenersStart).includes('if (!diagEnabled()) return')) {
     fail('runDiagnostics 入口缺少 diagEnabled() 拦截')
   }
-  // startBlankCapture 只允许被 runDiagnostics 调起
-  const capStart = clientCode.indexOf('function startBlankCapture')
-  const capEnd = clientCode.indexOf('function rectOf')
   const findCalls = (name) => {
     const sites = []
     let from = 0
@@ -200,13 +197,10 @@ if (diagStart < 0 || listenersStart < 0 || diagStart > listenersStart) {
     }
     return sites
   }
-  const captureRegion = capStart >= 0 && capEnd > capStart ? [capStart, capEnd] : null
   const runRegion = [diagStart, listenersStart]
   const inRegion = (i, r) => r !== null && i >= r[0] && i < r[1]
-  const outsideCapture = findCalls('startBlankCapture').filter((i) => !inRegion(i, runRegion))
-  if (outsideCapture.length) fail('startBlankCapture 被 runDiagnostics 之外的代码调起 —— 发布版会起 80s 轮询并写 localStorage')
-  const outsideDiag = findCalls('recordDiag').filter((i) => !inRegion(i, runRegion) && !inRegion(i, captureRegion))
-  if (outsideDiag.length) fail('recordDiag 被 runDiagnostics / startBlankCapture 之外的代码调起 —— 发布版会写 localStorage')
+  const outsideDiag = findCalls('recordDiag').filter((i) => !inRegion(i, runRegion))
+  if (outsideDiag.length) fail('recordDiag 被 runDiagnostics 之外的代码调起 —— 发布版会写 localStorage')
 
   // localStorage 写入只允许出现在 writePrefs（用户偏好）与 recordDiag（已门控）里
   const writeSites = []
@@ -220,7 +214,7 @@ if (diagStart < 0 || listenersStart < 0 || diagStart > listenersStart) {
   const wpStart = clientCode.indexOf('function writePrefs')
   const wpEnd = clientCode.indexOf('function installStyle')
   const rdStart = clientCode.indexOf('function recordDiag')
-  const rdEnd = clientCode.indexOf('function startBlankCapture')
+  const rdEnd = clientCode.indexOf('function rectOf')
   const writeRegions = [
     wpStart >= 0 && wpEnd > wpStart ? [wpStart, wpEnd] : null,
     rdStart >= 0 && rdEnd > rdStart ? [rdStart, rdEnd] : null
@@ -228,7 +222,7 @@ if (diagStart < 0 || listenersStart < 0 || diagStart > listenersStart) {
   const badWrites = writeSites.filter((i) => !writeRegions.some((r) => inRegion(i, r)))
   if (badWrites.length) {
     fail(`client.js 存在 writePrefs / recordDiag 之外的 localStorage 写入（${badWrites.length} 处）`)
-  } else if (!outsideCapture.length && !outsideDiag.length) {
+  } else if (!outsideDiag.length) {
     notes.push('诊断门控：DEBUG_DIAG=false 双闸 + 诊断调用/写入点全部收拢在白名单函数内')
   }
 }

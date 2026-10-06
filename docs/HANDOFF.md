@@ -164,6 +164,12 @@ composerSeatRect {x:280, y:938, w:1421, h:128} ← 顶边 938 → 胶囊整体�
 > 修复 = 照抄宿主欠费通知条目的 `inject → 惰性 register` 模式 + 3s 兜底注册。
 > 诊断链路教训:localStorage 值是 **UTF-16 存储**、且**只有文件变更才触发 client bundle
 > 重建**(冷启动提供的是上次构建的缓存包)—— 排障时刷新两次再看效果。
+>
+> **2026-10-06 v0.10.0**:用户判定雷达环构图失败,**Hero 雷达环与方案 B(接管空白页)
+> 已整体移除**(含为方案 B 服务的空白态采样链 startBlankCapture/probeLayoutTree/
+> probeHeroDom,以及 hero/takeover 两个偏好键);顶栏、胶囊、底部 HUD 带、品牌标记、
+> 辅助线、角标、底边线保留。方案 B 若重启,git 历史 v0.8.2 可考,且当时的组件结构
+> 指纹(HeroShell: Hqq-bq_titleGroup/previewBadge)仍有参考价值。
 
 ### 3.1 诊断代码混在生产产物里 🔴
 
